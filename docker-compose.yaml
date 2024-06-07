@@ -4,8 +4,6 @@ services:
   app:
     image: app:latest
     container_name: app
-    networks:
-      - app_network
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -15,22 +13,27 @@ services:
       - "./:/code"
     ports:
       - "8000:8000"
+    networks:
+      - chess
+    depends_on:
+      - postgres
   postgres:
     image: postgres
     container_name: db
+    hostname: localhost
     env_file:
       - .env
     volumes:
-       - postgres:/data/postgres
+       - pgdata:/var/lib/postgresql/data
+    networks:
+      - chess
     ports:
       - "5432:5432"
-    networks:
-      - app_network
 
 volumes:
-  postgres:
+  pgdata:
 
 networks:
-  app_network:
-
+  chess:
+    driver: bridge
   

@@ -12,7 +12,6 @@ down:
 lint:
 	black .
 	isort .
-	mypy .
 
 shell:
 	docker exec -it ${CONTAINER} sh
@@ -20,6 +19,10 @@ shell:
 psql:
 	docker exec -it db psql -U postgres -d app
 
-make_revision:
+al_revision:
 	alembic revision --autogenerate -m "$(m)"
+
+al_upgrade:
+	alembic upgrade head
+
 
